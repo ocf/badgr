@@ -4,7 +4,8 @@ API_DOCKER_TAG = docker-push.ocf.berkeley.edu/badgr-api:$(DOCKER_REVISION)
 UI_DOCKER_TAG = docker-push.ocf.berkeley.edu/badgr-ui:$(DOCKER_REVISION)
 
 API_VERSION := v3.5.4
-UI_VERSION := v2.24.52
+# TODO: Switch this to an actual tagged version, once a functional one is released.
+UI_VERSION := develop
 
 .PHONY: cook-image
 cook-image:
