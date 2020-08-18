@@ -6,6 +6,9 @@ metadata:
   name: badgr-api
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: badgr-api
   strategy:
     type: Recreate
   template:

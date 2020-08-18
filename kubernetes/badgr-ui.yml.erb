@@ -6,6 +6,9 @@ metadata:
   name: badgr-ui
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: badgr-ui
   strategy:
     type: Recreate
   template:
