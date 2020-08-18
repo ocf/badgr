@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: badgr-ui
+  name: badgr-ui
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: badgr-ui
+    spec:
+      containers:
+      - env:
+        - name: TZ
+          value: America/Los_Angeles
+        image: "docker-push.ocf.berkeley.edu/badgr-ui:<%= version %>"
+        name: badgr-ui
+        ports:
+        - name: http
+          containerPort: 80
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: badgr-ui
+  name: badgr-ui
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: badgr-ui
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: badgr-ui
+  name: vhost-ingress
+spec:
+  rules:
+    - host: badges.ocf.berkeley.edu
+      http:
+        paths:
+          - backend:
+              serviceName: badgr-ui
+              servicePort: 80

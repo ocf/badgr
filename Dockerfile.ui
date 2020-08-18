@@ -1,0 +1,17 @@
+FROM node:12 AS builder
+ARG ui_version=develop
+RUN cd / \
+    && git clone --depth 1 --branch $ui_version https://github.com/concentricsky/badgr-ui.git \
+    && cd badgr-ui \
+    && npm install
+COPY etc/environment.prod.ts /badgr-ui/src/environments/
+RUN ls /badgr-ui/src/environments/
+# They use a bash builtin in the script, so the default (/bin/sh) does not work.
+RUN npm config set script-shell "/bin/bash"
+RUN cd /badgr-ui \
+    && npm run build \
+	&& cd ../
+
+FROM nginx:1.19.2
+COPY --from=builder /badgr-ui/dist/* /usr/share/nginx/html/
+COPY etc/default.conf /etc/nginx/conf.d/default.conf

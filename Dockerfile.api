@@ -1,0 +1,33 @@
+FROM python:3.7-slim
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y default-libmysqlclient-dev \
+    python3-dev \
+    python3-cairo \
+    build-essential \
+    xmlsec1 \
+    libxmlsec1-dev \
+    pkg-config \
+    git \
+    libpq-dev \
+    nginx
+
+RUN pip install uwsgi psycopg2
+
+ARG api_version=develop
+
+RUN mkdir /badgr && cd /badgr && pip install --upgrade pip \
+    && git clone --depth 1 --branch ${api_version} https://github.com/concentricsky/badgr-server.git \
+    && cd badgr-server \
+    && pip install -r requirements.txt \
+    && cd ../
+
+COPY etc/nginx.conf /etc/nginx/nginx.conf
+COPY etc/site.conf /etc/nginx/sites-available/
+
+RUN rm -rf /etc/nginx/sites-available/default
+
+COPY etc/uwsgi.ini /badgr/badgr-server
+COPY etc/wsgi.py /badgr/badgr-server
+COPY etc/init.sh /badgr
+ENTRYPOINT [ "/badgr/init.sh" ]

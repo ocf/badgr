@@ -1,0 +1,74 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: badgr-api
+  name: badgr-api
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: badgr-api
+    spec:
+      containers:
+      - env:
+        - name: TZ
+          value: America/Los_Angeles
+        image: "docker-push.ocf.berkeley.edu/badgr-api:<%= version %>"
+        name: badgr-api
+        ports:
+        - name: http
+          containerPort: 80
+        volumeMounts:
+        - mountPath: "/badgr/config/"
+          name: badgr-api-claim0
+      restartPolicy: Always
+      volumes:
+      - name: badgr-api-claim0
+        hostPath:
+          path: /opt/share/kubernetes/secrets/badgr
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: badgr-api
+  name: badgr-api
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: badgr-api
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: badgr-api
+  name: vhost-ingress
+spec:
+  rules:
+    - host: badgr-api.ocf.berkeley.edu
+      http:
+        paths:
+          - backend:
+              serviceName: badgr-api
+              servicePort: 80
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: badgr-api-claim0
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: managed-nfs-storage
