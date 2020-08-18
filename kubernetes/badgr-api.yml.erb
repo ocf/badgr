@@ -60,15 +60,3 @@ spec:
           - backend:
               serviceName: badgr-api
               servicePort: 80
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: badgr-api-claim0
-spec:
-  accessModes:
-  - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: managed-nfs-storage
