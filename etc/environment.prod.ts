@@ -29,8 +29,8 @@ export const environment: BadgrEnvironment = {
 					url: "https://ocf.berkeley.edu/"
 				},
 				logoImg: {
-					small: require("../../../node_modules/@concentricsky/badgr-style/dist/images/logo.svg") as string,
-					desktop: require("../../../node_modules/@concentricsky/badgr-style/dist/images/logo.svg") as string,
+					small: require("../../../node_modules/@concentricsky/badgr-style/dist/images/os-logo-small.svg") as string,
+					desktop: require("../../../node_modules/@concentricsky/badgr-style/dist/images/os-logo-large.svg") as string,
 				},
 				loadingImg: {
 					// Image is inlined here to avoid any external resource loading, at the expense of a larger initial file size. We only do this for the default theme.
