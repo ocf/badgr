@@ -2,10 +2,16 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   creationTimestamp: null
+  labels:
+    app: memcached
   name: memcached
 spec:
   replicas: 1
-  strategy: {}
+  selector:
+    matchLabels:
+      app: memcached
+  strategy:
+    type: Recreate
   template:
     metadata:
       creationTimestamp: null
