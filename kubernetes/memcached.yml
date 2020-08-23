@@ -1,7 +1,6 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     app: memcached
   name: memcached
@@ -14,12 +13,11 @@ spec:
     type: Recreate
   template:
     metadata:
-      creationTimestamp: null
+      labels:
+        app: memcached
     spec:
       containers:
       - image: bitnami/memcached:latest
         name: memcached
-        resources: {}
       restartPolicy: Always
-status: {}
 
