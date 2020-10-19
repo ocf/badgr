@@ -7,7 +7,8 @@ export const environment: BadgrEnvironment = {
 				baseUrl: "//badgr-api.ocf.berkeley.edu",
 			},
 			features: {
-				alternateLandingRedirect: false
+				alternateLandingRedirect: false,
+				externalAuthProviders: [{slug: "saml2-ocf", label: "OCF Login", imgSrc: "https://static.ocf.berkeley.edu/img/penguin.svg", color: "#EE6055"}]
 			},
 			help: {
 				email: "help@ocf.berkeley.edu"
